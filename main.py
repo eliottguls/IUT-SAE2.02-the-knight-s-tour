@@ -1,5 +1,3 @@
-a = (5,7)
-
 def plateau_simple(n):
     p = []
     for i in range (n-1):
@@ -13,7 +11,7 @@ def plateau_pond(n):
    for i in range (n+1):
        for j in range (n+1):
            p[i,j] = 8
-
+ 
    # on initialise les 6
    for i in range (n+1):
        for j in range (n+1):
@@ -51,25 +49,13 @@ def plateau_pond(n):
 def deplacement(x,y):
     return  tuple(map(lambda i, j: i + j, x, y))
 
-def compare(a):
-    lim_x = (0, 0)
-    lim_y = (6,6)
-    
-    x = tuple(i >= j for i, j in zip(a,lim_x))
-    y = tuple(i <= j for i, j in zip(a,lim_y))
-
-    res = x and y
-    
-    
-    return res
-    
-
-print(compare(a))
-
-
-
-
-
+def compare(a, n):
+    min = 0
+    max = n
+    if(a[0]>=min and a[0]<=max):
+        if(a[1]>=min and a[1]<=max):
+            return True
+    return False
 
    
 """
