@@ -49,10 +49,9 @@ def plateau_pond(n):
 def deplacement(x,y):
     return  tuple(map(lambda i, j: i + j, x, y)) #additione les x et y de deux tuples
 
-
 def compare(a, n):
     min = 0
-    max = n
+    max = n-2
     if(a[0]>=min and a[0]<=max):
         if(a[1]>=min and a[1]<=max):
             return True
@@ -62,29 +61,34 @@ def compare(a, n):
 def Cavalier(pion, n):
     Sauts = [(-2,1),(-1,2),(1,2),(2,1),(2,-1),(1,-2),(-1,-2),(-2,-1)]
     echequier = plateau_pond(n)
-    Avisiter = plateau_simple(n)
+    AVisiter = plateau_simple(n)
     parcours = []
-    pond = 10 #plus que 8
-    print(pion)
-    while (Avisiter != []):
+    while (AVisiter != []):
+        pond_base = 10 # on met la pondération max a 10
         parcours.append(pion)
-        Avisiter.remove(pion)
-        Avisiter.clear()
+        AVisiter.remove(pion)
         for i in range (8): #len Sauts
-            print(i)
-            
-            if (compare(pion, n) == True):
-                if (echequier.get(deplacement(pion, Sauts[i])) < pond):
-                    pond = echequier.get(deplacement(pion, Sauts[i]))
-           
-    print(pond)
-    print(parcours)
+            if compare(deplacement(pion, Sauts[i]), n) == True: # regarde si le pion ne sort pas du tableau
+                x = (deplacement(pion, Sauts[i])) # recupere la nouvelle valeur du pion + saut
+                if echequier.get(x) != 0: #on ne soustrait pas si il n'y a déjà plus de possibilité
+                    echequier[x] = echequier.get(x)-1 # on soustrait la pondération des  valeurs ou peux aller le pion
+                if x in AVisiter: # si le nouveau deplacement est dans la liste des sommets a visiter
+                    if (echequier[x] < pond_base): # si la pondération de la nouvelle case est infèrieur aux autres ( de base on l'initialise a 10)
+                        pond_base = echequier.get(x) # on change la pond pour comparer la pondération de la nouvelle case à la plus petite à l'instant t
+                        next_case = x; # la prochaine case sera celle avec la pondération la plus faible
+        pion = next_case # on change la valeur du pion avec la nouvelle
+        print(AVisiter)
+    print(pion)
     return parcours
 
+"""
+il reste encore le backtracking
+"""
 
-Cavalier((0,0), 9)
 
+Cavalier((0,7), 9)
 
+"""
 pond = 10
 for i in range (8):
     echequier = plateau_pond(8)
@@ -92,7 +96,6 @@ for i in range (8):
     Sauts = [(-2,1),(-1,2),(1,2),(2,1),(2,-1),(1,-2),(-1,-2),(-2,-1)]
     print(deplacement(pion, Sauts[i]))
     pond = echequier.get(deplacement(pion, Sauts[i]))
-    print(pond)
-
-    
+    print(pond)  
 print(deplacement((1,1), (2,1)))
+"""
