@@ -49,6 +49,7 @@ def plateau_pond(n):
 def deplacement(x,y):
     return  tuple(map(lambda i, j: i + j, x, y)) #additione les x et y de deux tuples
 
+
 def compare(a, n):
     min = 0
     max = n
@@ -75,7 +76,7 @@ def Cavalier(pion, n):
             if (compare(pion, n) == True):
                 if (echequier.get(deplacement(pion, Sauts[i])) < pond):
                     pond = echequier.get(deplacement(pion, Sauts[i]))
-            
+           
     print(pond)
     print(parcours)
     return parcours
