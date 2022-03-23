@@ -56,33 +56,36 @@ def compare(a, n):
         if(a[1]>=min and a[1]<=max):
             return True
     return False
-
    
-"""
+
 def Cavalier(pion, n):
     Sauts = [(-2,1),(-1,2),(1,2),(2,1),(2,-1),(1,-2),(-1,-2),(-2,-1)]
     echequier = plateau_pond(n)
     Avisiter = plateau_simple(n)
-    parcours = ()
-    x = Sauts[0]
-    lim_x = (0, 0)
-    lim_y = (6,6)
-    while not Avisiter:
-        Avisiter.remover(pion)
-        
-        
-        for i in range (1,8):
-            if (deplacement ):
-                if ( pondx > )
-            
-            
-        pion = deplacement(pion,Sauts[1])
-        print(Avisiter)
-        print(pion)
+    parcours = []
+    pond = 10 #plus que 8
+    print(pion)
+    while (Avisiter != []):
+        parcours.append(pion)
+        Avisiter.remove(pion)
+        Avisiter.clear()
+        for i in range (8):
+            print(i)
+            if (deplacement(pion, Sauts[i]) == True):
+                print("test")
+                pond = echequier.get(deplacement(pion, Sauts[i]))
+    print(pond)
+    print(parcours)
     return parcours
 
 
-Cavalier((0,0), 7)
-"""
+Cavalier((0,0), 9)
+
+for i in range (8):
+    pion = (0,0)
+    Sauts = [(-2,1),(-1,2),(1,2),(2,1),(2,-1),(1,-2),(-1,-2),(-2,-1)]
+    print(i)
+    print(deplacement(pion, Sauts[i]))
+
 
     
