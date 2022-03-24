@@ -61,7 +61,7 @@ def compare(a, n):
 def Cavalier(pion, n):
     Sauts = [(-2,1),(-1,2),(1,2),(2,1),(2,-1),(1,-2),(-1,-2),(-2,-1)]
     echequier = plateau_pond(n)
-    AVisiter = plateau_simple(n)
+    AVisiter = plateau_simple(n)    
     parcours = []
     while (AVisiter != []):
         pond_base = 10 # on met la pondération max a 10
@@ -69,14 +69,40 @@ def Cavalier(pion, n):
         AVisiter.remove(pion)
         for i in range (8): #len Sauts
             if compare(deplacement(pion, Sauts[i]), n) == True: # regarde si le pion ne sort pas du tableau
-                x = (deplacement(pion, Sauts[i])) # recupere la nouvelle valeur du pion + saut
+                x = deplacement(pion, Sauts[i]) # recupere la nouvelle valeur du pion + saut
                 if echequier.get(x) != 0: #on ne soustrait pas si il n'y a déjà plus de possibilité
                     echequier[x] = echequier.get(x)-1 # on soustrait la pondération des  valeurs ou peux aller le pion
                 if x in AVisiter: # si le nouveau deplacement est dans la liste des sommets a visiter
                     if (echequier[x] < pond_base): # si la pondération de la nouvelle case est infèrieur aux autres ( de base on l'initialise a 10)
                         pond_base = echequier.get(x) # on change la pond pour comparer la pondération de la nouvelle case à la plus petite à l'instant t
                         next_case = x; # la prochaine case sera celle avec la pondération la plus faible
+
+        pion = next_case
+ 
+        if (pion == parcours[-1]):    
+            pion = parcours[-1] # le pion prend la valeur de la derniere case parcourus
+            #parcours.pop() # on reprned le dernier element parcourus
+            AVisiter.append(pion) # on remet l'ancienne case dans la liste des cases a parcourir
+            for i in range (8): # on parcours toute les posibilite de deplacement
+                if compare(deplacement(pion, Sauts[i]), n) == True: # si le deplcaement est dans le tableau
+                    x = deplacement(pion, Sauts[i])
+                    echequier[x] = echequier.get(x)+1 # on augmente sa ponderation de 1
+
+            for i in range (8):
+                if compare(deplacement(pion, Sauts[i]), n) == True:
+                    y = deplacement(pion, Sauts[i])
+                    if echequier.get(y) != 0: 
+                        echequier[y] = echequier.get(y)-1 
+                    if y in AVisiter: 
+                        if ( y != x):
+                            if (echequier[y] < pond_base): 
+                                pond_base = echequier.get(y) 
+                                next_case = y; 
+
+
+
         pion = next_case # on change la valeur du pion avec la nouvelle
+        print(pion)
         print(AVisiter)
     print(pion)
     return parcours
@@ -86,7 +112,7 @@ il reste encore le backtracking
 """
 
 
-Cavalier((0,7), 9)
+Cavalier((0,0), 9)
 
 """
 pond = 10
