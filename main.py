@@ -1,3 +1,6 @@
+from xmlrpc.client import boolean
+
+
 def plateau_simple(n):
     p = []
     for i in range (n-1):
@@ -75,33 +78,35 @@ def Cavalier(pion, n):
                 if x in AVisiter: # si le nouveau deplacement est dans la liste des sommets a visiter
                     if (echequier[x] < pond_base): # si la pondération de la nouvelle case est infèrieur aux autres ( de base on l'initialise a 10)
                         pond_base = echequier.get(x) # on change la pond pour comparer la pondération de la nouvelle case à la plus petite à l'instant t
-                        next_case = x; # la prochaine case sera celle avec la pondération la plus faible
+                        next_case = x # la prochaine case sera celle avec la pondération la plus faible
 
         pion = next_case
- 
-        if (pion == parcours[-1]):    
+        presence = False # va servir a voir si on a besoin de refaire un saut en arrière
+
+        while ((pion == parcours[-1] ) or ( presence == True)): 
             pion = parcours[-1] # le pion prend la valeur de la derniere case parcourus
-            #parcours.pop() # on reprned le dernier element parcourus
+            parcours.pop() # on reprned le dernier element parcourus
+            #il a bien été supprimé
             AVisiter.append(pion) # on remet l'ancienne case dans la liste des cases a parcourir
+            # il a bien été ajouré
             for i in range (8): # on parcours toute les posibilite de deplacement
                 if compare(deplacement(pion, Sauts[i]), n) == True: # si le deplcaement est dans le tableau
-                    x = deplacement(pion, Sauts[i])
-                    echequier[x] = echequier.get(x)+1 # on augmente sa ponderation de 1
-
+                    z = deplacement(pion, Sauts[i])
+                    echequier[z] = echequier.get(z)+1 # on augmente sa ponderation de 1
             for i in range (8):
                 if compare(deplacement(pion, Sauts[i]), n) == True:
                     y = deplacement(pion, Sauts[i])
                     if echequier.get(y) != 0: 
                         echequier[y] = echequier.get(y)-1 
                     if y in AVisiter: 
+                        presence = True #on peux aller visiter ce sommmet donc on change la variable boooléené
                         if ( y != x):
                             if (echequier[y] < pond_base): 
                                 pond_base = echequier.get(y) 
-                                next_case = y; 
+                                next_case = y
+            pion = next_case
 
 
-
-        pion = next_case # on change la valeur du pion avec la nouvelle
         print(pion)
         print(AVisiter)
     print(pion)
