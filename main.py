@@ -1,6 +1,3 @@
-from xmlrpc.client import boolean
-
-
 def plateau_simple(n):
     p = []
     for i in range (n-1):
@@ -66,6 +63,7 @@ def Cavalier(pion, n):
     echequier = plateau_pond(n)
     AVisiter = plateau_simple(n)    
     parcours = []
+    parcours_boucle = [] #on met les tuples qui feront bouclé le programme à l'infinis
     while (AVisiter != []):
         pond_base = 10 # on met la pondération max a 10
         parcours.append(pion)
@@ -81,9 +79,34 @@ def Cavalier(pion, n):
                         next_case = x # la prochaine case sera celle avec la pondération la plus faible
 
         pion = next_case
-        presence = False # va servir a voir si on a besoin de refaire un saut en arrière
 
+        while (pion == parcours[-1]): 
+            parcours.remove(pion) # on reprned le dernier element parcourus
+            pion = parcours[-1] # le pion prend la valeur de la derniere case parcourus
+            #il a bien été supprimé
+            AVisiter.append(pion) # on remet l'ancienne case dans la liste des cases a parcourir
+            # il a bien été ajouré
+            for i in range (8): # on parcours toute les posibilite de deplacement
+                if compare(deplacement(pion, Sauts[i]), n) == True: # si le deplcaement est dans le tableau
+                    z = deplacement(pion, Sauts[i])
+                    echequier[z] = echequier.get(z)+1 # on augmente sa ponderation de 1
+            for i in range (8):
+                if compare(deplacement(pion, Sauts[i]), n) == True:
+                    y = deplacement(pion, Sauts[i])
+                    if echequier.get(y) != 0: 
+                        echequier[y] = echequier.get(y)-1 
+                    if y in AVisiter: 
+                        if ( y != x):
+                            if (echequier[y] < pond_base): 
+                                pond_base = echequier.get(y) 
+                                next_case = y
+                                parcours_boucle.append(next_case)
+            pion = next_case
+
+
+        """
         while ((pion == parcours[-1] ) or ( presence == True)): 
+            pond_base = 10
             pion = parcours[-1] # le pion prend la valeur de la derniere case parcourus
             parcours.pop() # on reprned le dernier element parcourus
             #il a bien été supprimé
@@ -105,11 +128,11 @@ def Cavalier(pion, n):
                                 pond_base = echequier.get(y) 
                                 next_case = y
             pion = next_case
+            """
 
-
+        print("test")
         print(pion)
         print(AVisiter)
-    print(pion)
     return parcours
 
 """
