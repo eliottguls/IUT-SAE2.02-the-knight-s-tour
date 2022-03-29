@@ -1,3 +1,6 @@
+from termios import PARODD
+
+
 def plateau_simple(n):
     p = []
     for i in range (n-1):
@@ -63,6 +66,7 @@ def Cavalier(pion, n):
     echequier = plateau_pond(n)
     AVisiter = plateau_simple(n)    
     parcours = []
+    cp = 0
     while (len(parcours) != 64):
         # p_infini.clear()
         pond_base = 10 # on met la pondération max a 10
@@ -81,10 +85,10 @@ def Cavalier(pion, n):
         pion = next_case
 
         for i in range (8):
-            cp = 0
-            if compare(deplacement(pion, Sauts[i]), n) == False:
+            if compare(deplacement(pion, Sauts[i]), n) == False or deplacement(pion, Sauts[i]) in parcours:
                 cp = cp + 1
-            if cp == 7: # enlever celle d'où on vient
+                print(cp)
+            if cp == 8: 
                 AVisiter.append(pion)
                 parcours.remove(pion)
                 pion = parcours[-1]
@@ -93,8 +97,11 @@ def Cavalier(pion, n):
                         z = deplacement(pion, Sauts[i])
                         echequier[z] = echequier.get(z)+1 # on augmente sa ponderation de 1
                 for i in range (8):
-                    if compare(deplacement(pion, Sauts[i]), n) == True and deplacement(pion, Sauts[i] not in AVisiter): 
+                    print(compare(deplacement(pion, Sauts[i]), n))
+                    print(deplacement(pion, Sauts[i]))
+                    if compare(deplacement(pion, Sauts[i]), n) == True and deplacement(pion, Sauts[i]) in AVisiter: 
                         x = deplacement(pion, Sauts[i])
+                        print(x)
                         if echequier.get(x) != 0: 
                             echequier[x] = echequier.get(x)-1 
                         if (echequier[x] < pond_base):
@@ -102,6 +109,8 @@ def Cavalier(pion, n):
                             next_case = x
 
         pion = next_case 
+        cp = 0 # on le réinitialise
+
 
         """
         while (pion == parcours[-1]): 
@@ -139,6 +148,7 @@ def Cavalier(pion, n):
         print(len(parcours))
         print(" a visiter ", AVisiter)
         print(" le ", pion)
+
     return parcours
 
 Cavalier((0,0), 9)
