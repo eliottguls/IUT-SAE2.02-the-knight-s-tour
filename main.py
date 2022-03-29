@@ -49,10 +49,9 @@ def plateau_pond(n):
 def deplacement(x,y):
     return  tuple(map(lambda i, j: i + j, x, y)) #additione les x et y de deux tuples
 
-
 def compare(a, n):
     min = 0
-    max = n
+    max = n-2
     if(a[0]>=min and a[0]<=max):
         if(a[1]>=min and a[1]<=max):
             return True
@@ -62,37 +61,84 @@ def compare(a, n):
 def Cavalier(pion, n):
     Sauts = [(-2,1),(-1,2),(1,2),(2,1),(2,-1),(1,-2),(-1,-2),(-2,-1)]
     echequier = plateau_pond(n)
-    Avisiter = plateau_simple(n)
+    AVisiter = plateau_simple(n)    
     parcours = []
-    pond = 10 #plus que 8
-    print(pion)
-    while (Avisiter != []):
+    while (len(parcours) != 64):
+        # p_infini.clear()
+        pond_base = 10 # on met la pondération max a 10
         parcours.append(pion)
-        Avisiter.remove(pion)
-        Avisiter.clear()
+        AVisiter.remove(pion)
         for i in range (8): #len Sauts
-            print(i)
-            
-            if (compare(pion, n) == True):
-                if (echequier.get(deplacement(pion, Sauts[i])) < pond):
-                    pond = echequier.get(deplacement(pion, Sauts[i]))
-           
-    print(pond)
-    print(parcours)
+            if compare(deplacement(pion, Sauts[i]), n) == True: # regarde si le pion ne sort pas du tableau
+                x = deplacement(pion, Sauts[i]) # recupere la nouvelle valeur du pion + saut
+                if echequier.get(x) != 0: #on ne soustrait pas si il n'y a déjà plus de possibilité
+                    echequier[x] = echequier.get(x)-1 # on soustrait la pondération des  valeurs ou peux aller le pion
+                if x in AVisiter: # si le nouveau deplacement est dans la liste des sommets a visiter
+                    if (echequier[x] < pond_base): # si la pondération de la nouvelle case est infèrieur aux autres ( de base on l'initialise a 10)
+                        pond_base = echequier.get(x) # on change la pond pour comparer la pondération de la nouvelle case à la plus petite à l'instant t
+                        next_case = x # la prochaine case sera celle avec la pondération la plus faible
+
+        pion = next_case
+
+        for i in range (8):
+            cp = 0
+            if compare(deplacement(pion, Sauts[i]), n) == False:
+                cp = cp + 1
+            if cp == 7: # enlever celle d'où on vient
+                AVisiter.append(pion)
+                parcours.remove(pion)
+                pion = parcours[-1]
+                for i in range (8): # on parcours toute les posibilite de deplacement
+                    if compare(deplacement(pion, Sauts[i]), n) == True: # si le deplcaement est dans le tableau
+                        z = deplacement(pion, Sauts[i])
+                        echequier[z] = echequier.get(z)+1 # on augmente sa ponderation de 1
+                for i in range (8):
+                    if compare(deplacement(pion, Sauts[i]), n) == True and deplacement(pion, Sauts[i] not in AVisiter): 
+                        x = deplacement(pion, Sauts[i])
+                        if echequier.get(x) != 0: 
+                            echequier[x] = echequier.get(x)-1 
+                        if (echequier[x] < pond_base):
+                            pond_base = echequier.get(x)
+                            next_case = x
+
+        pion = next_case 
+
+        """
+        while (pion == parcours[-1]): 
+            if pion in p_infini :
+                parcours.pop()
+                pion = parcours[-1]
+            parcours.remove(pion) # on reprned le dernier element parcourus
+            pion = parcours[-1] # le pion prend la valeur de la derniere case parcourus
+            #il a bien été supprimé
+            AVisiter.append(pion) # on remet l'ancienne case dans la liste des cases a parcourir
+            # il a bien été ajouré
+            for i in range (8): # on parcours toute les posibilite de deplacement
+                if compare(deplacement(pion, Sauts[i]), n) == True: # si le deplcaement est dans le tableau
+                    z = deplacement(pion, Sauts[i])
+                    echequier[z] = echequier.get(z)+1 # on augmente sa ponderation de 1
+            for i in range (8):
+                if compare(deplacement(pion, Sauts[i]), n) == True:
+                    y = deplacement(pion, Sauts[i])
+                    if echequier.get(y) != 0: 
+                        echequier[y] = echequier.get(y)-1 
+                    if y in AVisiter: 
+                        if ( y != x):
+                            if (echequier[y] < pond_base): 
+                                pond_base = echequier.get(y) 
+                                next_case = y
+                                if pion not in p_infini :
+                                    p_infini.append(pion)
+
+            pion = next_case
+            """
+
+        print("")
+        print("")
+        print(" le parcours ", parcours)
+        print(len(parcours))
+        print(" a visiter ", AVisiter)
+        print(" le ", pion)
     return parcours
 
-
 Cavalier((0,0), 9)
-
-
-pond = 10
-for i in range (8):
-    echequier = plateau_pond(8)
-    pion = (0,0)
-    Sauts = [(-2,1),(-1,2),(1,2),(2,1),(2,-1),(1,-2),(-1,-2),(-2,-1)]
-    print(deplacement(pion, Sauts[i]))
-    pond = echequier.get(deplacement(pion, Sauts[i]))
-    print(pond)
-
-    
-print(deplacement((1,1), (2,1)))
