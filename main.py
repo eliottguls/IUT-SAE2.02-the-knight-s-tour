@@ -3,6 +3,10 @@ from xmlrpc.client import boolean
 import pygame as pg
 import time
 
+
+cpt = 0        
+
+
 def plateau_simple(n):
     p = []
     for i in range (n-1):
@@ -134,64 +138,56 @@ def jeu_6(pos, tab):
     red_square  = pg.transform.scale(pg.image.load(os.path.join("img", "rouge.png")), (square,square))
 
     run = True
-    def build(pos):
-            screen.blit(white_square, (0,0))
-            screen.blit(white_square, (0,212))
-            screen.blit(white_square, (0,424))
-            screen.blit(white_square, (212,0))
-            screen.blit(white_square, (424,0))
-            screen.blit(white_square, (106,106))
-            screen.blit(white_square, (318,106))
-            screen.blit(white_square, (530,106))
-            screen.blit(white_square, (212,212))
-            screen.blit(white_square, (424,212))
-            screen.blit(white_square, (106,318))
-            screen.blit(white_square, (318,318))
-            screen.blit(white_square, (530,318))
-            screen.blit(white_square, (212,424))
-            screen.blit(white_square, (424,424))
-            screen.blit(white_square, (106,530))
-            screen.blit(white_square, (318,530))
-            screen.blit(white_square, (530,530))
+    screen.blit(white_square, (0,0))
+    screen.blit(white_square, (0,212))
+    screen.blit(white_square, (0,424))
+    screen.blit(white_square, (212,0))
+    screen.blit(white_square, (424,0))
+    screen.blit(white_square, (106,106))
+    screen.blit(white_square, (318,106))
+    screen.blit(white_square, (530,106))
+    screen.blit(white_square, (212,212))
+    screen.blit(white_square, (424,212))
+    screen.blit(white_square, (106,318))
+    screen.blit(white_square, (318,318))
+    screen.blit(white_square, (530,318))
+    screen.blit(white_square, (212,424))
+    screen.blit(white_square, (424,424))
+    screen.blit(white_square, (106,530))
+    screen.blit(white_square, (318,530))
+    screen.blit(white_square, (530,530))
 
-            screen.blit(blue_square, (106,0))        
-            screen.blit(blue_square, (318,0))
-            screen.blit(blue_square, (530,0))
-            screen.blit(blue_square, (0,106)) 
-            screen.blit(blue_square, (0,318))      
-            screen.blit(blue_square, (0,530))  
-            screen.blit(blue_square, (212,106))
-            screen.blit(blue_square, (424,106))
-            screen.blit(blue_square, (106,212))
-            screen.blit(blue_square, (318,212))
-            screen.blit(blue_square, (530,212))
-            screen.blit(blue_square, (212,318))
-            screen.blit(blue_square, (424,318))
-            screen.blit(blue_square, (106,424))
-            screen.blit(blue_square, (318,424))
-            screen.blit(blue_square, (530,424))
-            screen.blit(blue_square, (212,530))
-            screen.blit(blue_square, (424,530))
-
+    screen.blit(blue_square, (106,0))        
+    screen.blit(blue_square, (318,0))
+    screen.blit(blue_square, (530,0))
+    screen.blit(blue_square, (0,106)) 
+    screen.blit(blue_square, (0,318))      
+    screen.blit(blue_square, (0,530))  
+    screen.blit(blue_square, (212,106))
+    screen.blit(blue_square, (424,106))
+    screen.blit(blue_square, (106,212))
+    screen.blit(blue_square, (318,212))
+    screen.blit(blue_square, (530,212))
+    screen.blit(blue_square, (212,318))
+    screen.blit(blue_square, (424,318))
+    screen.blit(blue_square, (106,424))
+    screen.blit(blue_square, (318,424))
+    screen.blit(blue_square, (530,424))
+    screen.blit(blue_square, (212,530))
+    screen.blit(blue_square, (424,530))
 
 
-            screen.blit(knight, pos)
-            pg.display.update()
 
-    cpt = 0        
+    screen.blit(knight, pos)
+    pg.display.update()
+
     while run:
-        while cpt<1:
-            cpt= cpt +1
-            build(pos)
-            chemin = False
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    run = False
-                    quit()
-                elif(pg.key.get_pressed()[pg.K_SPACE]):
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                run = False
+                quit()
+            elif(pg.key.get_pressed()[pg.K_SPACE]):
                     chemin = True
-            
-                while chemin : 
                     for i in range(0, len(tab)):
                         lst_tmp = list(tab[i])
                         for j in range (0, len(lst_tmp)):
@@ -202,23 +198,11 @@ def jeu_6(pos, tab):
                         screen.blit(knight, pos)
                         print("moved")
                         time.sleep(0.2)
-                    chemin = False
+                
 
 
 
 
 parcours = [(1,2), (5,4), (2,3)]
-jeu_6((0,0), parcours)
-# Cavalier((0,0), 9)
-
-"""
-pond = 10
-for i in range (8):
-    echequier = plateau_pond(8)
-    pion = (0,0)
-    Sauts = [(-2,1),(-1,2),(1,2),(2,1),(2,-1),(1,-2),(-1,-2),(-2,-1)]
-    print(deplacement(pion, Sauts[i]))
-    pond = echequier.get(deplacement(pion, Sauts[i]))
-    print(pond)  
-print(deplacement((1,1), (2,1)))
-"""
+# jeu_6((0,0), parcours)
+Cavalier((0,0), 9)
