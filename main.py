@@ -1,12 +1,3 @@
-import os
-from xmlrpc.client import boolean
-import pygame as pg
-import time
-
-
-cpt = 0        
-
-
 def plateau_simple(n):
     p = []
     for i in range (n-1):
@@ -56,7 +47,6 @@ def plateau_pond(n):
    return p    
 
 def deplacement(x,y):
-
     return  tuple(map(lambda i, j: i + j, x, y)) #additione les x et y de deux tuples
 
 def compare(a, n):
@@ -73,6 +63,7 @@ def Cavalier(pion, n):
     echequier = plateau_pond(n)
     AVisiter = plateau_simple(n)    
     parcours = []
+    parcours_boucle = [] #on met les tuples qui feront bouclé le programme à l'infinis
     while (AVisiter != []):
         pond_base = 10 # on met la pondération max a 10
         parcours.append(pion)
@@ -88,121 +79,36 @@ def Cavalier(pion, n):
                         next_case = x # la prochaine case sera celle avec la pondération la plus faible
 
         pion = next_case
-        presence = False # va servir a voir si on a besoin de refaire un saut en arrière
 
-        while ((pion == parcours[-1] ) or ( presence == True)): 
+        while (pion == parcours[-1]): 
+            parcours.remove(pion) # on reprned le dernier element parcourus
             pion = parcours[-1] # le pion prend la valeur de la derniere case parcourus
-            parcours.pop() # on reprned le dernier element parcourus
             #il a bien été supprimé
             AVisiter.append(pion) # on remet l'ancienne case dans la liste des cases a parcourir
             # il a bien été ajouré
-
-            # On reparcoure les cases possibles du cavalier depuis la case parcours[-1] et on incrémente de 1 chaque pondérations
             for i in range (8): # on parcours toute les posibilite de deplacement
                 if compare(deplacement(pion, Sauts[i]), n) == True: # si le deplcaement est dans le tableau
                     z = deplacement(pion, Sauts[i])
                     echequier[z] = echequier.get(z)+1 # on augmente sa ponderation de 1
             for i in range (8):
                 if compare(deplacement(pion, Sauts[i]), n) == True:
-                    y = deplacement(pion, Sauts[i])                    
+                    y = deplacement(pion, Sauts[i])
                     if echequier.get(y) != 0: 
                         echequier[y] = echequier.get(y)-1 
                     if y in AVisiter: 
-                        presence = True #on peux aller visiter ce sommmet donc on change la variable boooléenne
-                        if (y != x):
+                        if ( y != x):
                             if (echequier[y] < pond_base): 
                                 pond_base = echequier.get(y) 
                                 next_case = y
+                                parcours_boucle.append(next_case)
             pion = next_case
 
 
-        print("pion :", pion)
-        print("Avisiter : ",AVisiter)
-    print(pion)
+
+        print("Position du pion :\t",pion)
+        print("Avisiter : \t\t", AVisiter, "\n")
     return parcours
 
 
-    
-def jeu_6(pos, tab):
-    pg.init()
-
-    SIZE = 635
-    square = 106
-
-
-    clock = pg.time.Clock()
-    screen = pg.display.set_mode((SIZE,SIZE))
-    knight = pg.transform.scale(pg.image.load(os.path.join("img", "cavalier.png")), (square, square))
-    white_square = pg.transform.scale(pg.image.load(os.path.join("img", "blanc.png")), (square, square))
-    blue_square  = pg.transform.scale(pg.image.load(os.path.join("img", "bleu.png")), (square,square))
-    red_square  = pg.transform.scale(pg.image.load(os.path.join("img", "rouge.png")), (square,square))
-
-    run = True
-    screen.blit(white_square, (0,0))
-    screen.blit(white_square, (0,212))
-    screen.blit(white_square, (0,424))
-    screen.blit(white_square, (212,0))
-    screen.blit(white_square, (424,0))
-    screen.blit(white_square, (106,106))
-    screen.blit(white_square, (318,106))
-    screen.blit(white_square, (530,106))
-    screen.blit(white_square, (212,212))
-    screen.blit(white_square, (424,212))
-    screen.blit(white_square, (106,318))
-    screen.blit(white_square, (318,318))
-    screen.blit(white_square, (530,318))
-    screen.blit(white_square, (212,424))
-    screen.blit(white_square, (424,424))
-    screen.blit(white_square, (106,530))
-    screen.blit(white_square, (318,530))
-    screen.blit(white_square, (530,530))
-
-    screen.blit(blue_square, (106,0))        
-    screen.blit(blue_square, (318,0))
-    screen.blit(blue_square, (530,0))
-    screen.blit(blue_square, (0,106)) 
-    screen.blit(blue_square, (0,318))      
-    screen.blit(blue_square, (0,530))  
-    screen.blit(blue_square, (212,106))
-    screen.blit(blue_square, (424,106))
-    screen.blit(blue_square, (106,212))
-    screen.blit(blue_square, (318,212))
-    screen.blit(blue_square, (530,212))
-    screen.blit(blue_square, (212,318))
-    screen.blit(blue_square, (424,318))
-    screen.blit(blue_square, (106,424))
-    screen.blit(blue_square, (318,424))
-    screen.blit(blue_square, (530,424))
-    screen.blit(blue_square, (212,530))
-    screen.blit(blue_square, (424,530))
-
-
-
-    screen.blit(knight, pos)
-    pg.display.update()
-
-    while run:
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                run = False
-                quit()
-            elif(pg.key.get_pressed()[pg.K_SPACE]):
-                    chemin = True
-                    for i in range(0, len(tab)):
-                        lst_tmp = list(tab[i])
-                        for j in range (0, len(lst_tmp)):
-                            lst_tmp[j] = lst_tmp[j] * 106
-                            pos = lst_tmp
-                        pg.display.update()
-                        screen.blit(red_square, pos)
-                        screen.blit(knight, pos)
-                        print("moved")
-                        time.sleep(0.2)
-                
-
-
-
-
-parcours = [(1,2), (5,4), (2,3)]
-# jeu_6((0,0), parcours)
 Cavalier((0,0), 9)
+
